@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Cửa Hàng - Admin</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f6f8; }
+        header { background-color: #222; color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; }
+        header a { color: #ffc107; text-decoration: none; font-weight: bold; margin-left: 20px; }
+        .btn-logout { background: #dc3545; color: white !important; padding: 6px 12px; border-radius: 4px; }
+        .container { max-width: 1050px; margin: 30px auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .form-add { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .form-add input, .form-add textarea { flex: 1; min-width: 200px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: Arial; }
+        .btn-add { background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .search-bar { display: flex; gap: 10px; margin-bottom: 15px; }
+        .search-bar input { flex: 1; padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; }
+        .search-bar button { padding: 8px 16px; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 35px; }
+        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; vertical-align: middle; }
+        th { background-color: #f8f9fa; }
+        td img { width: 50px; height: 50px; object-fit: contain; }
+        .btn-edit { background: #007bff; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 14px; }
+        .btn-del { background: #dc3545; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 14px; margin-left: 5px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>⚙️ QUẢN TRỊ CỬA HÀNG</h1>
+        <div>
+            <a href="/">← Trang chủ bán hàng</a>
+            <a href="/logout" class="btn-logout">Đăng xuất</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>1. Thêm điện thoại mới</h2>
+        <form class="form-add" method="POST" action="/admin/them">
+            <input type="text" name="ten" placeholder="Tên điện thoại" required>
+            <input type="number" name="gia" placeholder="Giá bán (VNĐ)" required>
+            <input type="text" name="anh" placeholder="Link hình ảnh sản phẩm" required>
+            <input type="text" name="mo_ta" placeholder="Cấu hình (VD: Màn hình 6.7 inch, RAM 8GB, Pin 5000mAh)" required>
+            <button type="submit" class="btn-add">+ Thêm mới</button>
+        </form>
+
+        <h2>2. Kho sản phẩm ({{ danh_sach|length }} máy)</h2>
+        <form class="search-bar" method="GET" action="/admin">
+            <input type="text" name="q" placeholder="Tìm nhanh điện thoại trong kho..." value="{{ tu_khoa }}">
+            <button type="submit">Tìm kiếm</button>
+            {% if tu_khoa %}
+                <a href="/admin" style="padding: 8px 12px; background: #6c757d; color: white; text-decoration: none; border-radius: 4px;">Xem tất cả</a>
+            {% endif %}
+        </form>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Ảnh</th>
+                <th>Tên điện thoại</th>
+                <th>Giá bán</th>
+                <th>Cấu hình tóm tắt</th>
+                <th>Hành động</th>
+            </tr>
+            {% for dt in danh_sach %}
+            <tr>
+                <td>{{ dt.id }}</td>
+                <td><img src="{{ dt.anh }}" alt="{{ dt.ten }}"></td>
+                <td>{{ dt.ten }}</td>
+                <td>{{ "{:,.0f}".format(dt.gia) }}đ</td>
+                <td style="font-size: 13px; color: #555; max-width: 250px;">{{ dt.mo_ta }}</td>
+                <td>
+                    <a href="/admin/sua/{{ dt.id }}" class="btn-edit">Sửa</a>
+                    <a href="/admin/xoa/{{ dt.id }}" class="btn-del" onclick="return confirm('Xóa sản phẩm này khỏi cơ sở dữ liệu?')">Xóa</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>3. Đơn hàng khách đã đặt ({{ don_hang|length }} đơn)</h2>
+        <table>
+            <tr>
+                <th>Mã ĐH</th>
+                <th>Khách hàng</th>
+                <th>Số điện thoại</th>
+                <th>Địa chỉ giao</th>
+                <th>Sản phẩm đã mua</th>
+                <th>Tổng tiền</th>
+            </tr>
+            {% for dh in don_hang %}
+            <tr>
+                <td>#{{ dh.id }}</td>
+                <td><strong>{{ dh.ho_ten }}</strong></td>
+                <td>{{ dh.sdt }}</td>
+                <td>{{ dh.dia_chi }}</td>
+                <td>{{ dh.san_pham }}</td>
+                <td style="color: #d70018; font-weight: bold;">{{ "{:,.0f}".format(dh.tong_tien) }}đ</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align: center; color: #666;">Chưa có đơn đặt hàng nào.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

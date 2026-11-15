@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Sửa Sản Phẩm - Admin</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f6f8; }
+        .box { max-width: 500px; margin: 50px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        label { font-weight: bold; display: block; margin-top: 15px; }
+        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .actions { margin-top: 25px; display: flex; gap: 10px; }
+        .btn-save { flex: 1; background: #007bff; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-cancel { background: #6c757d; color: white; text-decoration: none; padding: 12px 20px; border-radius: 4px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>✏️ Chỉnh sửa thông tin điện thoại</h2>
+        <form method="POST">
+            <label>Tên điện thoại:</label>
+            <input type="text" name="ten" value="{{ sp.ten }}" required>
+
+            <label>Giá bán (VNĐ):</label>
+            <input type="number" name="gia" value="{{ sp.gia }}" required>
+
+            <label>Link hình ảnh:</label>
+            <input type="text" name="anh" value="{{ sp.anh }}" required>
+
+            <div class="actions">
+                <button type="submit" class="btn-save">Lưu thay đổi</button>
+                <a href="/admin" class="btn-cancel">Hủy</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

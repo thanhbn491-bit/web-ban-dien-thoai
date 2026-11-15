@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ sp.ten }} - Phone Store</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f6f8; }
+        header { background-color: #d70018; color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; }
+        header a { color: white; text-decoration: none; font-weight: bold; }
+        .container { max-width: 900px; margin: 40px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; gap: 40px; flex-wrap: wrap; }
+        .img-box { flex: 1; min-width: 280px; text-align: center; }
+        .img-box img { width: 100%; max-width: 300px; object-fit: contain; }
+        .info-box { flex: 1.5; min-width: 300px; }
+        .info-box h1 { margin-top: 0; color: #222; font-size: 26px; }
+        .price { color: #d70018; font-size: 24px; font-weight: bold; margin: 15px 0; }
+        .specs { background: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 4px solid #d70018; line-height: 1.6; color: #444; margin-bottom: 25px; white-space: pre-line; }
+        .btn-buy { display: inline-block; background-color: #d70018; color: white; text-decoration: none; padding: 14px 30px; border-radius: 5px; font-weight: bold; font-size: 16px; }
+        .btn-buy:hover { background-color: #b30014; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📱 PHONE STORE</h1>
+        <a href="/">← Quay lại danh sách sản phẩm</a>
+    </header>
+
+    <div class="container">
+        <div class="img-box">
+            <img src="{{ sp.anh }}" alt="{{ sp.ten }}">
+        </div>
+        <div class="info-box">
+            <h1>{{ sp.ten }}</h1>
+            <div class="price">{{ "{:,.0f}".format(sp.gia) }}đ</div>
+            <h3>Thông số kỹ thuật & Mô tả:</h3>
+            <div class="specs">{{ sp.mo_ta or "Chưa có thông tin cấu hình chi tiết." }}</div>
+            <a href="/them-gio-hang/{{ sp.id }}" class="btn-buy">🛒 Thêm vào giỏ hàng ngay</a>
+        </div>
+    </div>
+</body>
+</html>
